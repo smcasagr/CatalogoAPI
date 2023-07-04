@@ -9,4 +9,8 @@ public class Produto
     public string? ImagemUrl { get; set; }
     public float Estoque { get; set; }
     public DateTime DataCadastro { get; set; }
+
+    //Necessário para definir a relação Categoria:Produto
+    public int CategoriaId { get; set; }
+    public Categoria? Categoria { get; set; }
 }
