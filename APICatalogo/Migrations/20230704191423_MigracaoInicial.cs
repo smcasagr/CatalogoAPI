@@ -18,8 +18,8 @@ namespace APICatalogo.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nome = table.Column<string>(type: "text", nullable: true),
-                    ImagemUrl = table.Column<string>(type: "text", nullable: true)
+                    Nome = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
+                    ImagemUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,10 +32,10 @@ namespace APICatalogo.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nome = table.Column<string>(type: "text", nullable: true),
-                    Descricao = table.Column<string>(type: "text", nullable: true),
-                    Preco = table.Column<decimal>(type: "numeric", nullable: false),
-                    ImagemUrl = table.Column<string>(type: "text", nullable: true),
+                    Nome = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
+                    Descricao = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    Preco = table.Column<decimal>(type: "numeric(12,3)", nullable: false),
+                    ImagemUrl = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     Estoque = table.Column<float>(type: "real", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CategoriaId = table.Column<int>(type: "integer", nullable: false)
