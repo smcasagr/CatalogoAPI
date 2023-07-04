@@ -1,4 +1,8 @@
 
+using APICatalogo.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+
 namespace APICatalogo
 {
     public class Program
@@ -13,6 +17,11 @@ namespace APICatalogo
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            var dbConn = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(dbConn)
+            );
 
             var app = builder.Build();
 
