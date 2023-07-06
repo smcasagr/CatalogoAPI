@@ -2,6 +2,7 @@
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogo.Controllers
 {
@@ -52,6 +53,20 @@ namespace APICatalogo.Controllers
             // Aciona a rota informada, com o ID informado
             return new CreatedAtRouteResult("BuscarProduto",
                 new { id = produto.Id }, produto);
+        }
+
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, Produto produto)
+        {
+            if (id != produto.Id)
+            {
+                BadRequest();
+            }
+
+            _context.Entry(produto).State = EntityState.Modified; // informa que a entidade foi modificada e deve ser persistida
+            _context.SaveChanges();
+
+            return Ok(produto);
         }
     }
 }
