@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https": {
+    "CatalogoAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
