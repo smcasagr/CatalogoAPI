@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APICatalogo.Validations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -13,6 +14,7 @@ namespace APICatalogo.Models
 
         [Required(ErrorMessage = "O nome é obrigatório")]
         [StringLength(80)]
+        [PrimeiraLetraMaiuscula] // Validação personalizada
         public string? Nome { get; set; }
 
         [Required]
