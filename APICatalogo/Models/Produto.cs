@@ -38,6 +38,6 @@ namespace APICatalogo.Models
 
         // Ignora esta propriedade na hora de serializar o objeto
         [JsonIgnore]
-        public Categoria? Categoria { get; set; }
+        public Categoria? Categoria { get; set; }        
     }
 }

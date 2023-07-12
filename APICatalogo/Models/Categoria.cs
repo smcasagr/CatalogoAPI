@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APICatalogo.Models
 {
     [Table("Categorias")]
-    public class Categoria
+    public class Categoria : IValidatableObject
     {
         public Categoria()
         {
@@ -24,5 +24,22 @@ namespace APICatalogo.Models
         public string? ImagemUrl { get; set; }
 
         public ICollection<Produto>? Produtos { get; set; } // Necessário para definir a relação 1:n - Uma categoria pode ter n produtos.
+
+        // Outra maneira de se criar uma validação personalizada - Necesário implementar IValidadeOption
+        // Desta maneira aqui, só é possível fazer a validação no modelo que a implementa - no caso específico, Categoria
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (!string.IsNullOrEmpty(Nome))
+            {
+                var primeiraLetra = this.Nome[0].ToString();
+                if (primeiraLetra != primeiraLetra.ToUpper())
+                {
+                    // itera em todos os itens que apresentarem este problema
+                    yield return new
+                        ValidationResult("A primeira letra da categoria deve ser maiúscula!",
+                            new[] { nameof(this.Nome) });
+                }
+            }
+        }
     }
 }
