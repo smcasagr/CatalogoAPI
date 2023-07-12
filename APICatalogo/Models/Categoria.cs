@@ -25,7 +25,7 @@ namespace APICatalogo.Models
 
         public ICollection<Produto>? Produtos { get; set; } // Necessário para definir a relação 1:n - Uma categoria pode ter n produtos.
 
-        // Outra maneira de se criar uma validação personalizada - Necesário implementar IValidadeOption
+        // Outra maneira de se criar uma validação personalizada, diretamente no modelo - Necesário implementar IValidatableObject
         // Desta maneira aqui, só é possível fazer a validação no modelo que a implementa - no caso específico, Categoria
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
