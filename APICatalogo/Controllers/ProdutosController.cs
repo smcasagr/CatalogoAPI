@@ -34,6 +34,7 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name="BuscarProduto")]
         public async Task<ActionResult<Produto>> Get(int id)
         {
+            // throw new Exception("Erro ao busca os produtos pelo ID");
             try
             {
                 var produto = await _context.Produtos.FirstOrDefaultAsync(x => x.Id == id);

@@ -1,9 +1,9 @@
 
 using APICatalogo.Context;
+using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace APICatalogo
@@ -23,7 +23,7 @@ namespace APICatalogo
 
             builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado toda vez que precisar
 
-            builder.Services.AddScoped<ApiLoggingFilter>();
+            builder.Services.AddScoped<ApiLoggingFilter>(); // inserindo o serviço de filtro customizado
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -35,6 +35,9 @@ namespace APICatalogo
             );            
 
             var app = builder.Build();
+
+            // Adicionando o middleware de tratamento de erro
+            app.ConfigureExceptionHandler();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
