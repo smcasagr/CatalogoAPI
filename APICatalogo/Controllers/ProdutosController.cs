@@ -1,4 +1,5 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.Filters;
 using APICatalogo.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
+        [ServiceFilter(typeof(ApiLoggingFilter))] // como foi definido a injeção de dependência no filtro, deve-se usar este atributo
         public async Task<ActionResult<IEnumerable<Produto>>> GetAll()
         {
             var produtos = await _context.Produtos.AsNoTracking().ToListAsync();

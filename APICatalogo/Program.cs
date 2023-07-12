@@ -1,5 +1,6 @@
 
 using APICatalogo.Context;
+using APICatalogo.Filters;
 using APICatalogo.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -21,7 +22,9 @@ namespace APICatalogo
                         .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado toda vez que precisar
-            
+
+            builder.Services.AddScoped<ApiLoggingFilter>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
