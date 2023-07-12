@@ -1,5 +1,6 @@
 
 using APICatalogo.Context;
+using APICatalogo.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.Json.Serialization;
@@ -18,6 +19,8 @@ namespace APICatalogo
                 .AddJsonOptions(options =>
                     options.JsonSerializerOptions
                         .ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+            builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado toda vez que precisar
             
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,6 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,13 @@ namespace APICatalogo.Controllers
         public CategoriasController(AppDbContext context)
         {
             _context = context;
+        }
+
+        // Exemplo de utilização de Service criado
+        [HttpGet("saudacao/{nome=Samuel}")]
+        public ActionResult<string> GetSaudacao([FromServices] IMeuServico meuServico, string nome)
+        {
+            return meuServico.Saudacao(nome);
         }
 
         [HttpGet("produtos")]
