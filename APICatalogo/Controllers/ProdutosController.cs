@@ -18,9 +18,9 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Produto>> GetAll()
+        public async Task<ActionResult<IEnumerable<Produto>>> GetAll()
         {
-            var produtos = _context.Produtos.ToList();
+            var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
             if (produtos is null)
             {
                 return NotFound("Produtos não encontrados!");
@@ -28,16 +28,25 @@ namespace APICatalogo.Controllers
             return produtos;
         }
 
+        // [HttpGet("{id:int:min(1)}", Name = "BuscarProduto")] - o min(1) restringe o número mínimo a ser passado na URL
         [HttpGet("{id:int}", Name="BuscarProduto")]
-        public ActionResult<Produto> Get(int id)
+        public async Task<ActionResult<Produto>> Get(int id)
         {
-            var produto = _context.Produtos.FirstOrDefault(x => x.Id == id);
-            if (produto == null) 
+            try
             {
-                return NotFound($"Produto não encontrado - ID: {id}");
-            }
+                var produto = await _context.Produtos.FirstOrDefaultAsync(x => x.Id == id);
+                if (produto == null)
+                {
+                    return NotFound($"Produto não encontrado - ID: {id}");
+                }
 
-            return produto;
+                return produto;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ocorreu um problema ao tratar a sua solicitação no servidor!");
+            }            
         }
 
         [HttpPost]

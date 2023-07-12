@@ -23,15 +23,6 @@ namespace APICatalogo
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-/*
-            builder.Services.AddEntityFrameworkNpgsql()
-                .AddDbContext<AppDbContext>(opt =>
-                {
-                    var connString = builder.Configuration.GetConnectionString("DefaultConnection");
-                    opt.UseNpgsql(connString);
-                }
-            );*/
-
             var dbConn = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(dbConn)
