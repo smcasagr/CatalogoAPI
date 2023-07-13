@@ -3,9 +3,9 @@ using APICatalogo.Context;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using APICatalogo.Logging;
+using APICatalogo.Repository;
 using APICatalogo.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 
 namespace APICatalogo
@@ -23,6 +23,15 @@ namespace APICatalogo
                     options.JsonSerializerOptions
                         .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var dbConn = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(dbConn)
+            );
+
             builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado a cada request
 
             builder.Services.AddScoped<ApiLoggingFilter>(); // inserindo o serviço de filtro customizado
@@ -37,14 +46,8 @@ namespace APICatalogo
                     }));
             }
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            var dbConn = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(dbConn)
-            );            
+            // Registrando serviço do Unit of Work
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 
