@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
 namespace APICatalogo.Models
 {
@@ -9,7 +9,8 @@ namespace APICatalogo.Models
         public string? Trace { get; set; }
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            //return JsonConvert.SerializeObject(this);
+            return JsonSerializer.Serialize(this);
         }
     }
 }

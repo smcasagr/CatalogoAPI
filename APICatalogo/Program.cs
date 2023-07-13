@@ -21,7 +21,7 @@ namespace APICatalogo
                     options.JsonSerializerOptions
                         .ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-            builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado toda vez que precisar
+            builder.Services.AddTransient<IMeuServico, MeuServico>(); // criado a cada request
 
             builder.Services.AddScoped<ApiLoggingFilter>(); // inserindo o serviço de filtro customizado
 

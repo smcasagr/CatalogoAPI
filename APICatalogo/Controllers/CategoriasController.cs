@@ -13,11 +13,14 @@ namespace APICatalogo.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public CategoriasController(AppDbContext context, IConfiguration configuration)
+        public CategoriasController(AppDbContext context, IConfiguration configuration,
+            ILogger<CategoriasController> logger)
         {
             _context = context;
             _configuration = configuration;
+            _logger = logger;
         }
 
         // Lendo dados do arquivo appsettings.json
@@ -40,6 +43,7 @@ namespace APICatalogo.Controllers
         [HttpGet("produtos")]
         public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoriasProdutos()
         {
+            _logger.LogInformation(" ========== GET categorias/produtos ========== ");
             // Busca todas as categorias e seus produtos
             //return _context.Categorias.Include(p => p.Produtos).ToList();
             // como não há alterações a serem feitas, não é necessário rastrear (guardar as infos em cache)
@@ -66,6 +70,9 @@ namespace APICatalogo.Controllers
         [HttpGet("{id:int}", Name = "BuscarCategoria")]
         public async Task<ActionResult<Categoria>> Get(int id)
         {
+            _logger.LogInformation($" ========== GET categorias/id = {id} ========== ");
+            // Teste de exceção personalizada
+            //throw new Exception("Erro ao busca a categoria pelo ID");
             try
             {
                 var categoria = await _context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
