@@ -1,6 +1,7 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Filters;
 using APICatalogo.Models;
+using APICatalogo.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +12,23 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context; // injetando a instância de db context no controlador
+        private readonly IUnitOfWork _uof; // injetando a instância de db context no controlador
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(IUnitOfWork uof)
         {
-            _context = context;
+            _uof = uof;
+        }
+
+        [HttpGet("menorpreco")]
+        public ActionResult<IEnumerable<Produto>> GetProdutosPrecos() 
+        {
+            return _uof.ProdutoRepository.GetProdutosPorPreco().ToList();
         }
 
         [HttpGet]
-        [ServiceFilter(typeof(ApiLoggingFilter))] // como foi definido a injeção de dependência no filtro, deve-se usar este atributo
-        public async Task<ActionResult<IEnumerable<Produto>>> GetAll()
+        public ActionResult<IEnumerable<Produto>> GetAll()
         {
-            var produtos = await _context.Produtos.AsNoTracking().ToListAsync();
+            var produtos = _uof.ProdutoRepository.Get().ToList();
             if (produtos is null)
             {
                 return NotFound("Produtos não encontrados!");
@@ -30,14 +36,13 @@ namespace APICatalogo.Controllers
             return produtos;
         }
 
-        // [HttpGet("{id:int:min(1)}", Name = "BuscarProduto")] - o min(1) restringe o número mínimo a ser passado na URL
         [HttpGet("{id:int}", Name="BuscarProduto")]
-        public async Task<ActionResult<Produto>> Get(int id)
+        public ActionResult<Produto> Get(int id)
         {
             // throw new Exception("Erro ao busca os produtos pelo ID");
             try
             {
-                var produto = await _context.Produtos.FirstOrDefaultAsync(x => x.Id == id);
+                var produto = _uof.ProdutoRepository.GetById(p => p.Id == id);
                 if (produto == null)
                 {
                     return NotFound($"Produto não encontrado - ID: {id}");
@@ -58,8 +63,8 @@ namespace APICatalogo.Controllers
             if (produto is null)
                 return BadRequest();
 
-            _context.Produtos.Add(produto); // persiste na memória
-            _context.SaveChanges(); // salva do BD
+            _uof.ProdutoRepository.Add(produto); // persiste na memória
+            _uof.Commit(); // salva do BD
 
             // informa o produto salvo no header
             // Aciona a rota informada, com o ID informado
@@ -75,8 +80,8 @@ namespace APICatalogo.Controllers
                 BadRequest();
             }
 
-            _context.Entry(produto).State = EntityState.Modified; // informa que a entidade foi modificada e deve ser persistida
-            _context.SaveChanges();
+            _uof.ProdutoRepository.Update(produto);
+            _uof.Commit();
 
             return Ok(produto);
         }
@@ -84,14 +89,14 @@ namespace APICatalogo.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         { 
-            var produto = _context.Produtos.FirstOrDefault(p => p.Id == id);
+            var produto = _uof.ProdutoRepository.GetById(p => p.Id == id);
             if (produto is null )
             {
                 return NotFound($"Produto não localizado! - ID: {id}");
             }
 
-            _context.Produtos.Remove(produto);
-            _context.SaveChanges();
+            _uof.ProdutoRepository.Delete(produto);
+            _uof.Commit();
 
             return Ok(produto);
         }

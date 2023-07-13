@@ -41,41 +41,28 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("produtos")]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategoriasProdutos()
+        public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            _logger.LogInformation(" ========== GET categorias/produtos ========== ");
-            // Busca todas as categorias e seus produtos
-            //return _context.Categorias.Include(p => p.Produtos).ToList();
-            // como não há alterações a serem feitas, não é necessário rastrear (guardar as infos em cache)
-            return await _context.Categorias.Include(p => p.Produtos).AsNoTracking().ToListAsync();
-
-            // O mais correto é nunca retornar uma busca sem algum filtro, como acima
-            // Numa aplicação real, melhor fazer como abaixo
-            // return _context.Categorias.Include(p => p.Produtos).Where(c => c.Id <= 5).AsNoTracking().ToList();
+            return _context.Categorias.Include(p => p.Produtos).Where(c => c.Id <= 5).AsNoTracking().ToList();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetAll()
+        public ActionResult<IEnumerable<Categoria>> GetAll()
         {
-            //return _context.Categorias.ToList();            
-            return await _context.Categorias.AsNoTracking().ToListAsync();
 
-            // No ambiente real, é sempre melhor retornar um número específico de registros
-            // Nunca usar todos como acima.
-            // return _context.Categorias.Take(10).AsNoTracking().ToList();
+            return _context.Categorias.Take(10).AsNoTracking().ToList();
         }
 
         // [HttpGet("{id:alpha}", Name = "BuscarCategoria")] - alpha: caso queira restringir os parâmetros a caracteres alfanuméricos
         // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
         [HttpGet("{id:int}", Name = "BuscarCategoria")]
-        public async Task<ActionResult<Categoria>> Get(int id)
+        public ActionResult<Categoria> Get(int id)
         {
-            _logger.LogInformation($" ========== GET categorias/id = {id} ========== ");
-            // Teste de exceção personalizada
+
             //throw new Exception("Erro ao busca a categoria pelo ID");
             try
             {
-                var categoria = await _context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
+                var categoria = _context.Categorias.FirstOrDefault(x => x.Id == id);
                 if (categoria == null)
                 {
                     return NotFound($"Categoria não encontrada - ID: {id}");
