@@ -10,7 +10,7 @@ namespace APICatalogo.Repository.Categorias
 
         public IEnumerable<Categoria> GetCategoriasProdutos()
         {
-            return Get().Include(x => x.Produtos);
+            return Get().Include(c => c.Produtos).AsNoTracking();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Repository;
 using APICatalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,14 @@ namespace APICatalogo.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _uof;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
 
-        public CategoriasController(AppDbContext context, IConfiguration configuration,
+        public CategoriasController(IUnitOfWork uof, IConfiguration configuration,
             ILogger<CategoriasController> logger)
         {
-            _context = context;
+            _uof = uof;
             _configuration = configuration;
             _logger = logger;
         }
@@ -40,29 +41,26 @@ namespace APICatalogo.Controllers
             return meuServico.Saudacao(nome);
         }
 
-        [HttpGet("produtos")]
+        [HttpGet("catprodutos")]
         public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            return _context.Categorias.Include(p => p.Produtos).Where(c => c.Id <= 5).AsNoTracking().ToList();
+            return _uof.CategoriaRepository.GetCategoriasProdutos().ToList();
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> GetAll()
         {
-
-            return _context.Categorias.Take(10).AsNoTracking().ToList();
+            return _uof.CategoriaRepository.Get().Take(10).ToList();
         }
 
-        // [HttpGet("{id:alpha}", Name = "BuscarCategoria")] - alpha: caso queira restringir os parâmetros a caracteres alfanuméricos
         // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
         [HttpGet("{id:int}", Name = "BuscarCategoria")]
         public ActionResult<Categoria> Get(int id)
         {
-
             //throw new Exception("Erro ao busca a categoria pelo ID");
             try
             {
-                var categoria = _context.Categorias.FirstOrDefault(x => x.Id == id);
+                var categoria = _uof.CategoriaRepository.GetById(c => c.Id == id);
                 if (categoria == null)
                 {
                     return NotFound($"Categoria não encontrada - ID: {id}");
@@ -83,8 +81,8 @@ namespace APICatalogo.Controllers
             if (categoria is null)
                 return BadRequest();
 
-            _context.Categorias.Add(categoria); // persiste na memória
-            _context.SaveChanges(); // salva do BD
+            _uof.CategoriaRepository.Add(categoria); // persiste na memória
+            _uof.Commit(); // salva do BD
 
             // informa o produto salvo no header
             // Aciona a rota informada, com o ID informado
@@ -100,8 +98,8 @@ namespace APICatalogo.Controllers
                 BadRequest();
             }
 
-            _context.Entry(categoria).State = EntityState.Modified; // informa que a entidade foi modificada e deve ser persistida
-            _context.SaveChanges();
+            _uof.CategoriaRepository.Update(categoria);
+            _uof.Commit();
 
             return Ok(categoria);
         }
@@ -109,14 +107,14 @@ namespace APICatalogo.Controllers
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var categoria = _context.Categorias.FirstOrDefault(p => p.Id == id);
+            var categoria = _uof.CategoriaRepository.GetById(c => c.Id == id);
             if (categoria is null)
             {
                 return NotFound($"Categoria não localizada! - ID: {id}");
             }
 
-            _context.Categorias.Remove(categoria);
-            _context.SaveChanges();
+            _uof.CategoriaRepository.Delete(categoria);
+            _uof.Commit();
 
             return Ok(categoria);
         }
