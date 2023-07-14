@@ -1,7 +1,9 @@
 ﻿using APICatalogo.Context;
+using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Repository;
 using APICatalogo.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +15,15 @@ namespace APICatalogo.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uof;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
 
-        public CategoriasController(IUnitOfWork uof, IConfiguration configuration,
-            ILogger<CategoriasController> logger)
+        public CategoriasController(IUnitOfWork uof, IMapper mapper,
+            IConfiguration configuration, ILogger<CategoriasController> logger)
         {
             _uof = uof;
+            _mapper = mapper;
             _configuration = configuration;
             _logger = logger;
         }
@@ -42,15 +46,21 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("catprodutos")]
-        public ActionResult<IEnumerable<Categoria>> GetCategoriasProdutos()
+        public ActionResult<IEnumerable<CategoriaDTO>> GetCategoriasProdutos()
         {
-            return _uof.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categoria = _uof.CategoriaRepository.GetCategoriasProdutos().ToList();
+            var categoriaDTO = _mapper.Map<List<CategoriaDTO>>(categoria);
+
+            return categoriaDTO;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Categoria>> GetAll()
+        public ActionResult<IEnumerable<CategoriaDTO>> GetAll()
         {
-            return _uof.CategoriaRepository.Get().Take(10).ToList();
+            var categoria = _uof.CategoriaRepository.Get().Take(10).ToList();
+            var categoriaDTO = _mapper.Map<List<CategoriaDTO>>(categoria);
+
+            return categoriaDTO;
         }
 
         // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
@@ -66,7 +76,9 @@ namespace APICatalogo.Controllers
                     return NotFound($"Categoria não encontrada - ID: {id}");
                 }
 
-                return Ok(categoria);
+                var categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
+
+                return Ok(categoriaDTO);
             }
             catch (Exception)
             {
@@ -98,10 +110,12 @@ namespace APICatalogo.Controllers
                 BadRequest();
             }
 
+            var categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
+
             _uof.CategoriaRepository.Update(categoria);
             _uof.Commit();
 
-            return Ok(categoria);
+            return Ok(categoriaDTO);
         }
 
         [HttpDelete("{id:int}")]
@@ -116,7 +130,9 @@ namespace APICatalogo.Controllers
             _uof.CategoriaRepository.Delete(categoria);
             _uof.Commit();
 
-            return Ok(categoria);
+            var categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
+
+            return Ok(categoriaDTO);
         }
 
     }
