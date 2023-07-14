@@ -8,6 +8,6 @@ namespace APICatalogo.Repository
         IProdutoRepository ProdutoRepository { get; }
         ICategoriaRepository CategoriaRepository { get; }
 
-        void Commit(); // método que irá persistir os dados
+        Task Commit(); // método que irá persistir os dados
     }
 }

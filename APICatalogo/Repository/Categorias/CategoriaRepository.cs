@@ -9,9 +9,9 @@ namespace APICatalogo.Repository.Categorias
     {
         public CategoriaRepository(AppDbContext context) : base(context) { }
 
-        public IEnumerable<Categoria> GetCategoriasProdutos()
+        public async Task<IEnumerable<Categoria>> GetCategoriasProdutos()
         {
-            return Get().Include(c => c.Produtos).AsNoTracking();
+            return await Get().Include(c => c.Produtos).AsNoTracking().ToListAsync();
         }
 
         public PagedList<Categoria> GetCategorias(CategoriasParameters categoriasParameters)

@@ -1,6 +1,7 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
 using APICatalogo.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 namespace APICatalogo.Repository.Produtos
 {
@@ -8,9 +9,9 @@ namespace APICatalogo.Repository.Produtos
     {
         public ProdutoRepository(AppDbContext context) : base(context) { }
 
-        public IEnumerable<Produto> GetProdutosPorPreco()
+        public async Task<IEnumerable<Produto>> GetProdutosPorPreco()
         {
-            return Get().OrderBy(C => C.Preco).ToList();
+            return await Get().OrderBy(C => C.Preco).ToListAsync();
         }
 
         // NEcessário para se ter uma melhor performance na aplicação
