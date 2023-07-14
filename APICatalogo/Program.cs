@@ -7,6 +7,7 @@ using APICatalogo.Logging;
 using APICatalogo.Repository;
 using APICatalogo.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -48,6 +49,11 @@ namespace APICatalogo
                     }));
             }
 
+            // Adiciona o Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                            .AddEntityFrameworkStores<AppDbContext>()
+                            .AddDefaultTokenProviders();
+
             // Registrando serviço do Unit of Work
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -72,7 +78,11 @@ namespace APICatalogo
             }
 
             app.UseHttpsRedirection();
+
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllers();
 
             app.Run();
