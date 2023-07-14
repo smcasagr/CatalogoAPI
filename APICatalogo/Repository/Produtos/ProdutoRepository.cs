@@ -15,7 +15,7 @@ namespace APICatalogo.Repository.Produtos
         }
 
         // NEcessário para se ter uma melhor performance na aplicação
-        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        public async Task<PagedList<Produto>> GetProdutos(ProdutosParameters produtosParameters)
         {
 /*            return Get()
                 .OrderBy(on => on.Nome)
@@ -23,7 +23,8 @@ namespace APICatalogo.Repository.Produtos
                 .Take(produtosParameters.PageSize) // seleciona o n de registros correspondentes ao n da página
                 .ToList();*/
 
-            return PagedList<Produto>
+            return await
+                PagedList<Produto>
                 .ToPagedList(Get().OrderBy(on => on.Nome),
                              produtosParameters.PageNumber,
                              produtosParameters.PageSize);

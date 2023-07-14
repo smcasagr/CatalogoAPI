@@ -14,9 +14,10 @@ namespace APICatalogo.Repository.Categorias
             return await Get().Include(c => c.Produtos).AsNoTracking().ToListAsync();
         }
 
-        public PagedList<Categoria> GetCategorias(CategoriasParameters categoriasParameters)
+        public async Task<PagedList<Categoria>> GetCategorias(CategoriasParameters categoriasParameters)
         {
-            return PagedList<Categoria>
+            return await 
+                PagedList<Categoria>
                 .ToPagedList(Get().OrderBy(on => on.Nome),
                              categoriasParameters.PageNumber,
                              categoriasParameters.PageSize);

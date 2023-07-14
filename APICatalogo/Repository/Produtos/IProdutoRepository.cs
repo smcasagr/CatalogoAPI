@@ -8,6 +8,6 @@ namespace APICatalogo.Repository.Produtos
         // Além dos métodos constantes na interface genérica
         // Quero este método em específico, por exemplo
         Task<IEnumerable<Produto>> GetProdutosPorPreco();
-        PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters);
+        Task<PagedList<Produto>> GetProdutos(ProdutosParameters produtosParameters);
     }
 }
