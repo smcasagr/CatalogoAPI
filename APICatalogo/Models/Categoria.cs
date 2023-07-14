@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APICatalogo.Models
 {
@@ -23,6 +24,7 @@ namespace APICatalogo.Models
         [MaxLength(300)]
         public string? ImagemUrl { get; set; }
 
+        [JsonIgnore]
         public ICollection<Produto>? Produtos { get; set; } // Necessário para definir a relação 1:n - Uma categoria pode ter n produtos.
 
         // Outra maneira de se criar uma validação personalizada, diretamente no modelo - Necesário implementar IValidatableObject
