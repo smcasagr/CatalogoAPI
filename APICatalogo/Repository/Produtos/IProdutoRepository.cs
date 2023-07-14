@@ -1,4 +1,5 @@
 ﻿using APICatalogo.Models;
+using APICatalogo.Pagination;
 
 namespace APICatalogo.Repository.Produtos
 {
@@ -7,5 +8,6 @@ namespace APICatalogo.Repository.Produtos
         // Além dos métodos constantes na interface genérica
         // Quero este método em específico, por exemplo
         IEnumerable<Produto> GetProdutosPorPreco();
+        IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters);
     }
 }

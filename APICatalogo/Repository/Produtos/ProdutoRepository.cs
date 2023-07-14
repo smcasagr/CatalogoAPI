@@ -1,5 +1,6 @@
 ﻿using APICatalogo.Context;
 using APICatalogo.Models;
+using APICatalogo.Pagination;
 
 namespace APICatalogo.Repository.Produtos
 {
@@ -11,5 +12,16 @@ namespace APICatalogo.Repository.Produtos
         {
             return Get().OrderBy(C => C.Preco).ToList();
         }
+
+        // NEcessário para se ter uma melhor performance na aplicação
+        public IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        {
+            return Get()
+                .OrderBy(on => on.Nome)
+                .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize) // separando os registros pelo tamanho definido
+                .Take(produtosParameters.PageSize) // seleciona o n de registros correspondentes ao n da página
+                .ToList();
+        }
+
     }
 }
