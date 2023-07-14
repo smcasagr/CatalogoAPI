@@ -14,14 +14,18 @@ namespace APICatalogo.Repository.Produtos
         }
 
         // NEcessário para se ter uma melhor performance na aplicação
-        public IEnumerable<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
         {
-            return Get()
+/*            return Get()
                 .OrderBy(on => on.Nome)
                 .Skip((produtosParameters.PageNumber - 1) * produtosParameters.PageSize) // separando os registros pelo tamanho definido
                 .Take(produtosParameters.PageSize) // seleciona o n de registros correspondentes ao n da página
-                .ToList();
-        }
+                .ToList();*/
 
+            return PagedList<Produto>
+                .ToPagedList(Get().OrderBy(on => on.Nome),
+                             produtosParameters.PageNumber,
+                             produtosParameters.PageSize);
+        }
     }
 }

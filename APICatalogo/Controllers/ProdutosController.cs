@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace APICatalogo.Controllers
 {
@@ -37,7 +38,22 @@ namespace APICatalogo.Controllers
         public ActionResult<IEnumerable<ProdutoDTO>> GetAll([FromQuery] ProdutosParameters produtosParameters)
         {
             //var produtos = _uof.ProdutoRepository.Get().ToList();
-            var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters).ToList();
+            //var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters).ToList();
+            var produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+
+            // Passando as informações de paginação para o header
+            var metadata = new
+            {
+                produtos.TotalCount,
+                produtos.PageSize,
+                produtos.CurrentPage,
+                produtos.TotalPages,
+                produtos.HasNext,
+                produtos.HasPrevious
+            };
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+
+
             if (produtos is null)
             {
                 return NotFound("Produtos não encontrados!");
