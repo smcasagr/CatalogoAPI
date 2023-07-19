@@ -33,10 +33,28 @@ namespace APICatalogo
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
             // Habilitando o Swagger para usar autenticação JWT
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "APICatalogo", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "APICatalogo",
+                    Description = "Catálogo de Produtos e Categorias",
+                    TermsOfService = new Uri("https://nonexiste.net/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Samuel",
+                        Email = "firkraag@gmail.com",
+                        Url = new Uri("https://nonexiste.net/"),
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Usar sobre LICX",
+                        Url = new Uri("https://nonexiste.net/license"),
+                    }
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
@@ -155,6 +173,7 @@ namespace APICatalogo
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                // Habilitando o middleware do Swagger
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
