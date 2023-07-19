@@ -9,6 +9,7 @@ using APICatalogo.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -114,6 +115,7 @@ namespace APICatalogo
                 opt.AssumeDefaultVersionWhenUnspecified = true;
                 opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
+                opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
 
             // Registrando serviço do Unit of Work
