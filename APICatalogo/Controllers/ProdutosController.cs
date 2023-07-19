@@ -34,6 +34,10 @@ namespace APICatalogo.Controllers
             return produtosDTO;
         }
 
+        /// <summary>
+        /// Exibe uma relação de todos os produtos
+        /// </summary>
+        /// <returns>Retorna uma lista de objetos Produto</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProdutoDTO>>> GetAll([FromQuery] ProdutosParameters produtosParameters)
         {
@@ -63,6 +67,11 @@ namespace APICatalogo.Controllers
             return produtosDTO;
         }
 
+        /// <summary>
+        /// Obtém um produto pelo seu identificador Id
+        /// </summary>
+        /// <param name="id">Código do produto</param>
+        /// <returns>Um objeto Produto</returns>
         [HttpGet("{id:int}", Name="BuscarProduto")]
         public async Task<ActionResult<ProdutoDTO>> Get(int id)
         {

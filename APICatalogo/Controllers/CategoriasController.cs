@@ -80,6 +80,11 @@ namespace APICatalogo.Controllers
             return categoriaDTO;
         }
 
+        /// <summary>
+        /// Obtém uma categoria pelo seu Id
+        /// </summary>
+        /// <param name="id">Código da categoria</param>
+        /// <returns>Objetos Categoria</returns>
         // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
         [HttpGet("{id:int}", Name = "BuscarCategoria")]
         //[EnableCors("PermitirApiRequest")] // Habilita o CORS via service somente nesta Action
@@ -105,6 +110,22 @@ namespace APICatalogo.Controllers
             }
         }
 
+        /// <summary>
+        /// Inclui uma nova categoria
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de request:
+        /// 
+        ///     POST categorias
+        ///     {
+        ///         "id": 1,
+        ///         "nome": "categoria1",
+        ///         "imagemUrl: "categoria1.jpg"
+        ///     }
+        /// </remarks>
+        /// <param name="categoria">objeto Categoria</param>
+        /// <returns>O objeto Categoria incluída</returns>
+        /// <remarks>Retorna o objeto Categoria incluído</remarks>
         [HttpPost]
         public async Task<ActionResult> Post(Categoria categoria)
         {
