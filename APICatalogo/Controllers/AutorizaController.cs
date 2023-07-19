@@ -8,6 +8,7 @@ using System.Text;
 
 namespace APICatalogo.Controllers
 {
+    [Produces("application/json")]
     [Route("[controller]")]
     [ApiController]
     public class AutorizaController : ControllerBase

@@ -11,6 +11,7 @@ using System.Text.Json;
 namespace APICatalogo.Controllers
 {
     [Authorize(AuthenticationSchemes = "Bearer")] // habilita a proteção por bearer
+    [Produces("application/json")]
     [Route("[controller]")]
     [ApiController]
     [EnableCors("CorsPolicy")]
