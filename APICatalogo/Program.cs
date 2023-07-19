@@ -108,6 +108,14 @@ namespace APICatalogo
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     });
 
+            // Adicionando configuração de versionamento
+            builder.Services.AddApiVersioning(opt =>
+            {
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+                opt.ReportApiVersions = true;
+            });
+
             // Registrando serviço do Unit of Work
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
