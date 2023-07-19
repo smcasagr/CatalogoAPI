@@ -1,14 +1,12 @@
-﻿using APICatalogo.Context;
-using APICatalogo.DTOs;
+﻿using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using APICatalogo.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace APICatalogo.Controllers
@@ -16,6 +14,8 @@ namespace APICatalogo.Controllers
     [Authorize(AuthenticationSchemes = "Bearer")] // habilita a proteção por bearer
     [Route("[controller]")]
     [ApiController]
+    [EnableCors("CorsPolicy")]
+    //[EnableCors("PermitirApiRequest")] // Habilita o CORS via service
     public class CategoriasController : ControllerBase
     {
         private readonly IUnitOfWork _uof;
@@ -82,6 +82,7 @@ namespace APICatalogo.Controllers
 
         // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
         [HttpGet("{id:int}", Name = "BuscarCategoria")]
+        //[EnableCors("PermitirApiRequest")] // Habilita o CORS via service somente nesta Action
         public async Task<ActionResult<Categoria>> Get(int id)
         {
             //throw new Exception("Erro ao busca a categoria pelo ID");

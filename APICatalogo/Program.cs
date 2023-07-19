@@ -119,6 +119,24 @@ namespace APICatalogo
             IMapper mapper = mappingConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
+/*
+            // Configurando limitação CORS via serviço
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("PermitirApiRequest",
+                                builder => builder.WithOrigins("https://apirequest.io")
+                                                .WithMethods("GET"));
+            });*/
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", c =>
+                {
+                    c.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
+                });
+            });
+
             var app = builder.Build();
 
             // Adicionando o middleware de tratamento de erro
@@ -136,6 +154,15 @@ namespace APICatalogo
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+/*
+            // Limitando CORS via middleware
+            app.UseCors(opt =>
+            {   
+                opt.WithOrigins("https://apirequest.io")
+                    .WithMethods("GET";
+            });*/   
+            app.UseCors();
 
             app.MapControllers();
 

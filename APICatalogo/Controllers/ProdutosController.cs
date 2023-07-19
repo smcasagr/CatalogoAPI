@@ -1,14 +1,11 @@
-﻿using APICatalogo.Context;
-using APICatalogo.DTOs;
-using APICatalogo.Filters;
+﻿using APICatalogo.DTOs;
 using APICatalogo.Models;
 using APICatalogo.Pagination;
 using APICatalogo.Repository;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace APICatalogo.Controllers
@@ -16,6 +13,7 @@ namespace APICatalogo.Controllers
     [Authorize(AuthenticationSchemes = "Bearer")] // habilita a proteção por bearer
     [Route("[controller]")]
     [ApiController]
+    [EnableCors("CorsPolicy")]
     public class ProdutosController : ControllerBase
     {
         private readonly IUnitOfWork _uof; // injetando a instância de db context no controlador
