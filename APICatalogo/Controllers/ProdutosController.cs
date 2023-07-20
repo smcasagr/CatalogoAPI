@@ -10,6 +10,7 @@ using System.Text.Json;
 
 namespace APICatalogo.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [Authorize(AuthenticationSchemes = "Bearer")] // habilita a proteção por bearer
     [Produces("application/json")]
     [Route("[controller]")]

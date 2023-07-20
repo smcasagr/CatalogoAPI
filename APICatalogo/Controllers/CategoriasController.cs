@@ -86,9 +86,11 @@ namespace APICatalogo.Controllers
         /// </summary>
         /// <param name="id">Código da categoria</param>
         /// <returns>Objetos Categoria</returns>
-        // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
-        [HttpGet("{id:int}", Name = "BuscarCategoria")]
         //[EnableCors("PermitirApiRequest")] // Habilita o CORS via service somente nesta Action
+        // [HttpGet("{id:alpha:length(5)}", Name = "BuscarCategoria")] - aceita somente - e estritamente - o número estipulado de caracteres
+        [ProducesResponseType(typeof(CategoriaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("{id:int}", Name = "BuscarCategoria")]
         public async Task<ActionResult<Categoria>> Get(int id)
         {
             //throw new Exception("Erro ao busca a categoria pelo ID");
@@ -128,6 +130,8 @@ namespace APICatalogo.Controllers
         /// <returns>O objeto Categoria incluída</returns>
         /// <remarks>Retorna o objeto Categoria incluído</remarks>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Post(Categoria categoria)
         {
             if (categoria is null)
@@ -143,6 +147,8 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [ApiConventionMethod(typeof(DefaultApiConventions),
+                             nameof(DefaultApiConventions.Put))]
         public async Task<ActionResult> Put(int id, Categoria categoria)
         {
             if (id != categoria.Id)
