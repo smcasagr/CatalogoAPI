@@ -30,6 +30,7 @@ namespace APICatalogo.Pagination
             // Limita número de itens exibidos
             if (pageSize > 5)
                 pageSize = 5;
+
             // busca os items que irão aparecer em cada página e gera uma lista deles
             var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
