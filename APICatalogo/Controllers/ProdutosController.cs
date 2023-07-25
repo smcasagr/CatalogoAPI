@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using System.Text.Json;
 
 namespace APICatalogo.Controllers
@@ -16,6 +17,7 @@ namespace APICatalogo.Controllers
     [Route("[controller]")]
     [ApiController]
     [EnableCors("CorsPolicy")]
+    [EnableQuery] // Habilita o OData
     public class ProdutosController : ControllerBase
     {
         private readonly IUnitOfWork _uof; // injetando a instância de db context no controlador

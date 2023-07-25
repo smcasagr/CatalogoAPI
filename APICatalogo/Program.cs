@@ -10,12 +10,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.OData;
 
 namespace APICatalogo
 {
@@ -139,6 +141,12 @@ namespace APICatalogo
                 opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
                 opt.ReportApiVersions = true;
                 opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            });
+
+            //Adiciona o serviço do OData
+            builder.Services.AddControllers().AddOData(opt =>
+            {
+                opt.Expand().Select().Count().OrderBy().Filter();
             });
 
             // Registrando serviço do Unit of Work
