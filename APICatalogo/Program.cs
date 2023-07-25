@@ -3,6 +3,7 @@ using APICatalogo.Context;
 using APICatalogo.DTOs.Mappings;
 using APICatalogo.Extensions;
 using APICatalogo.Filters;
+using APICatalogo.GraphQL;
 using APICatalogo.Logging;
 using APICatalogo.Repository;
 using APICatalogo.Services;
@@ -17,7 +18,6 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using Microsoft.OData;
 
 namespace APICatalogo
 {
@@ -86,7 +86,7 @@ namespace APICatalogo
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
@@ -146,6 +146,7 @@ namespace APICatalogo
             //Adiciona o serviço do OData
             builder.Services.AddControllers().AddOData(opt =>
             {
+                // Consultas permitidas na URI do OData
                 opt.Expand().Select().Count().OrderBy().Filter();
             });
 
@@ -178,6 +179,11 @@ namespace APICatalogo
                 });
             });
 
+            // GraphQL Config
+/*            builder.Services.AddGraphQLServer()
+                            .AddQueryType<CategoriaType>();*/
+
+
             var app = builder.Build();
 
             // Adicionando o middleware de tratamento de erro
@@ -190,6 +196,8 @@ namespace APICatalogo
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //app.MapGraphQL();
 
             app.UseHttpsRedirection();
 
